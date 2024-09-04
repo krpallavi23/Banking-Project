@@ -1,0 +1,468 @@
+use [Banking Project];
+
+create table tblbank
+(
+bankid int not null,
+bankdetails varchar(50)
+);
+
+alter table tblbank add constraint pk_bankid primary key (bankid);
+
+insert into tblbank values(1001,'State Bank Of India');
+insert into tblbank values(1002,'State Bank OF India');
+insert into tblbank values(1003,'State Bank Of India');
+insert into tblbank values(1004,'ICICI');
+insert into tblbank values(1005,'Punjab');
+insert into tblbank values(1006,'HDFC');
+insert into tblbank values(1007,'IDBI');
+insert into tblbank values(1008,'Karnataka Bank');
+insert into tblbank values(1009,'Syndicate Bank');
+insert into tblbank values(1010,'Canara Bank');
+insert into tblbank values(1011,'Citi Bank');
+insert into tblbank values(1012,'Wells Fargo');
+insert into tblbank values(1013,'Discover');
+insert into tblbank values(1014,'TCF');
+
+
+                               --  tbladdaddress(table-2)
+
+create table tbladdaddress
+(
+addid int not null,
+addline1 varchar(100),
+addline2 varchar(50),
+addcity varchar(50),
+addpostcode varchar(15),
+addstate varchar(50),
+addcountry varchar(50)
+);
+alter table tbladdaddress add constraint pk_addid primary key (addid);
+
+insert into tbladdaddress(addid,addline1,addline2,addcity,addpostcode,addstate,addcountry)
+values(1001,'9730 37th Place North','Apt#204','Polymouth','55441','MN','USA');
+insert into tbladdaddress(addid,addline1,addline2,addcity,addpostcode,addstate,addcountry)
+values(1002,'Kombettu House','Padavu,Ujirpade Post Balnad','puttur','574203','Karnataka','India');
+insert into tbladdaddress(addid,addline1,addline2,addcity,addpostcode,addstate,addcountry)
+values(1003,'302, Sai Manor Towers','X Roads,SR Nagar','Hyderabad','574038','Andra Pradesh','India');
+
+
+                               --tblbtbranchtype(table-3)
+
+
+create table tblbtbranchtype
+(
+bttypecode varchar(4) not null,
+bttypedesc varchar(100)
+);
+alter table tblbtbranchtype add constraint pk_bttypecode primary key (bttypecode);
+
+insert into tblbtbranchtype values('LU','Large Urban');
+insert into Tblbtbranchtype values('SR','Small Rural');
+insert into tblbtbranchtype values('HO','Head Office');
+insert into tblbtbranchtype values('CU','City');
+
+
+
+
+                              -- tblbrbranch(table-4)
+
+create table tblbrbranch
+(
+brid int not null,
+brbankid int,
+braddress int,
+brbranchtypecode varchar(4),
+brbranchname varchar(100),
+brbranchphone1 bigint,
+brbranchphone2 bigint,
+brbranchfax bigint,
+brbranchmail varchar(50),
+brbranchIFSC varchar(20)
+);
+alter table tblbrbranch add constraint pk_brid primary key(brid);
+alter table tblbrbranch add constraint fk_brbankid foreign key(brbankid) references tblbank(bankid);
+alter table tblbrbranch add constraint fk_braddress foreign key(braddress) references tbladdaddress(addid);
+alter table tblbrbranch add constraint fk_brbranchtypecode foreign key(brbranchtypecode) references tblbtbranchtype(bttypecode);
+
+INSERT INTO tblbrBranch(brid,brbankid,braddress,brbranchtypecode,brbranchname,brbranchphone1,brbranchphone2,brbranchfax,brbranchmail,brbranchIFSC)
+values(1000,1011,1001,'LU','Golden Valley',13234164705,13234164095,17639541522,'wellsforgov@wellsforgo.com','WFGV1015');
+INSERT INTO tblbrBranch(brid,brbankid,braddress,brbranchtypecode,brbranchname,brbranchphone1,brbranchphone2,brbranchfax,brbranchmail,brbranchIFSC)
+values(1001,1008,1002,'SR','Mangalore',91824247623,91824247624,91824247625,'banker25@karnatakabank.com','KBIN05267');
+INSERT INTO tblbrBranch(brid,brbankid,braddress,brbranchtypecode,brbranchname,brbranchphone1,brbranchphone2,brbranchfax,brbranchmail,brbranchIFSC)
+values(1002,1001,1003,'HO','Puttur Market',918251249246,918251249247,918251249244,'sbi.04270@sbi.co.in','SBIN004270');
+
+
+                                  --tblcustomer(table-5)
+
+create table tblcustomer
+(
+cstid int not null,
+cstaddid int,
+cstbranchid int,
+cstfirstname varchar(50),
+cstlastname varchar(50),
+cstmiddlename varchar(50),
+cstdate date,
+cstsince date,
+cstphone1 bigint,
+cstphone2 bigint,
+cstfax varchar(20),
+cstgender varchar(10),
+cstemail varchar(50)
+);
+alter table tblcustomer add constraint pk_cstid primary key(cstid);
+alter table tblcustomer add constraint fk_cstaddid foreign key(cstaddid) references tbladdaddress(addid);
+alter table tblcustomer add constraint fk_cstbranchid foreign key(cstbranchid) references tblbrbranch(brid);
+insert into tblcustomer(cstid,cstaddid,cstbranchid,cstfirstname,cstlastname,cstmiddlename,cstdate,cstsince,cstphone1,cstphone2,cstfax,cstgender,cstemail)
+values(1000,1001,1000,'Nitin','Kumar','','9-nov-1985','10-aug-1996',247623,null,'null','Male','x');
+insert into tblcustomer(cstid,cstaddid,cstbranchid,cstfirstname,cstlastname,cstmiddlename,cstdate,cstsince,cstphone1,cstphone2,cstfax,cstgender,cstemail)
+values(1001,1002,1001,'Gaurao','Tarpe','','25-dec-1986','19-mar-2000',918251246,null,null,'Male','y');
+insert into tblcustomer(cstid,cstaddid,cstbranchid,cstfirstname,cstlastname,cstmiddlename,cstdate,cstsince,cstphone1,cstphone2,cstfax,cstgender,cstemail)
+values(1002,1003,1002,'Chithra','Kunjathaya','Nitin','19-jan-1990','6-jun-2005',918251247,null,null,'Female','y');
+insert into tblcustomer(cstid,cstaddid,cstbranchid,cstfirstname,cstlastname,cstmiddlename,cstdate,cstsince,cstphone1,cstphone2,cstfax,cstgender,cstemail)
+values(1003,1002,1001,'Adarsh','Hedge','','19-jan-1990','1-mar-2015',918251249246,null,null,'Male','Y');
+insert into tblcustomer(cstid,cstaddid,cstbranchid,cstfirstname,cstlastname,cstmiddlename,cstdate,cstsince,cstphone1,cstphone2,cstfax,cstgender,cstemail)
+values(1004,1003,1002,'Nathan','Kumas','','10-nov-1985','20-aug-1996',13234164705,null,null,'Male','y');
+
+
+                             --tblaccaccountstatus(table-6)
+
+CREATE TABLE tblaccaccountstatus
+(
+    accstatuscode VARCHAR(10) NOT NULL,
+    accstatusdesc VARCHAR(50),
+    CONSTRAINT pk_accstatuscode PRIMARY KEY (accstatuscode)
+);
+
+-- Insert data
+INSERT INTO tblaccaccountstatus (accstatuscode, accstatusdesc) 
+VALUES ('A', 'Active'), 
+       ('C', 'Closed');
+
+-- Rename the column
+EXEC sp_rename 'tblaccaccountstatus.accstatuscode', 'accstatus', 'COLUMN';
+
+                        
+                             --tblaccaccounttype(table-7)
+CREATE TABLE tblaccaccounttype
+(
+    acctypecode VARCHAR(10) NOT NULL,
+    acctypedesc VARCHAR(100),
+    CONSTRAINT pk_acctypecode PRIMARY KEY (acctypecode)
+);
+
+-- Insert data
+INSERT INTO tblaccaccounttype (acctypecode, acctypedesc)
+VALUES ('CHK', 'Checking'),
+       ('SAV', 'Saving'),
+       ('CUR', 'Current'),
+       ('LN', 'Loan');
+
+-- Rename the column
+EXEC sp_rename 'tblaccaccounttype.acctypecode', 'acctype', 'COLUMN';
+
+                   
+                             --tblaccaccount(table-8)
+create table tblaccaccount
+(
+accint int not null,
+accstatuscode varchar(10),
+acctypecode varchar(10),
+acccustomerid int,
+accbalance int
+);
+alter table tblaccaccount add constraint pk_accint primary key(accint);
+alter table tblaccaccount add constraint fk_accstatuscode foreign key(accstatuscode) references tblaccaccountstatus(accstatuscode);
+alter table tblaccaccount add constraint fk_acctypecode foreign key(acctypecode) references tblaccaccounttype(acctypecode);
+insert into tblaccaccount(accint,accstatuscode,acctypecode,acccustomerid,accbalance) values(10000,'A','SAV',1000,11000);
+insert into tblaccaccount values(10001,'A','CUR',1001,200000.9897);
+insert into tblaccaccount values(10002,'A','SAV',1002,30000.456);
+insert into tblaccaccount values(10003,'C','CHK',1003,5000);
+insert into tblaccaccount values(10004,'C','SAV',1004,500);
+insert into tblaccaccount values(10005,'A','SAV',1004,500);
+
+
+
+                           --tbltransactiontype(table-9)
+
+create table tbltransactiontype
+(
+trantypecode varchar(6) not null,
+trantypedesc varchar(50)
+);
+alter table tbltransactiontype add constraint pk_trantypecode primary key(trantypecode);
+insert into tbltransactiontype values('D','Deposit');
+insert into tbltransactiontype values('W','Withdrawal');
+
+
+                          --tbltrantransaction(table-10)
+
+create table tbltrantransaction
+(
+tranid int not null,
+tranaccountint int,
+trantypecode varchar(6),
+tranmerchantid varchar(10),
+trandate date,
+tranamount int,
+trandescription varchar(50)
+);
+alter table tbltrantransaction add constraint pk_tranid primary key(tranid);
+alter table tbltrantransaction add constraint fk_tranaccountint foreign key(tranaccountint) references tblaccaccount(accint);
+alter table tbltrantransaction add constraint fk_trantypecode foreign key(trantypecode) references tbltransactiontype(trantypecode);
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20000,10000,'D','Self','10-nov-2017',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20001,10002,'W','Discover','3-aug-2018',200000,'Withdrawal');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20002,10000,'D','Self','18-aug-2018',13.45,'Cheque#5001');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20003,10001,'D','Self','17-jun-2018',2500,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20004,10002,'W','Discover','14-may-2017',25000,'Withdrawal');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20005,10004,'D','','20-may-2018',1300.45,'Cheque#5001');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20006,10002,'D','Self','12-may-2018',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20007,10000,'W','Discover','4-may-2017',200000,'Withdrawal');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20008,10001,'D','','8-may-2018',13.45,'Cheque#5001');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20009,10003,'D','Self','17-may-2018',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20010,10001,'D','Self','31-oct-2018',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20011,10004,'W','Discover','18-may-2018',200000,'Withdrawal');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20012,10001,'D','Self','20-nov-2018',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20013,10000,'D','Self','17-oct-2017',20500.456,'Self Deposit');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20014,10002,'W','Discover','17-jul-18',25000,'Withdrawal');
+insert into tbltrantransaction(tranid,tranaccountint,trantypecode,tranmerchantid,trandate,tranamount,trandescription)
+values(20015,null,'W','Self','18-aug-2018',25001,'Withdrawal');
+
+
+
+    --synonym's
+
+--SYNONYMS ARE PERMENANT ALTERNATE NAMES TO TABLES
+
+CREATE SYNONYM synbank FOR tblbank;
+CREATE SYNONYM synaddress FOR tbladdaddress;
+CREATE SYNONYM synbranchtype FOR tblbtbranchtype;
+CREATE SYNONYM synbranch FOR tblbrbranch;
+CREATE SYNONYM syncustomer FOR tblcustomer;
+CREATE SYNONYM synaccountstatus FOR tblaccaccountstatus;
+CREATE SYNONYM synaccounttype FOR tblaccaccounttype;
+CREATE SYNONYM synaccount FOR tblaccaccount;
+CREATE SYNONYM syntransactiontype FOR tbltransactiontype;
+CREATE SYNONYM syntransaction FOR tbltrantransaction;
+
+select * from sys.synonyms;
+
+                           ---Joins
+				-- 1. Join tblbrbranch with tblbank
+
+SELECT 
+    b.brbranchname,
+    b.brbranchphone1,
+    bk.bankdetails AS bank_name
+FROM 
+    tblbrbranch b
+JOIN 
+    tblbank bk ON b.brbankid = bk.bankid;
+
+	            -- 2. Join tblbrbranch with tblbtbranchtype
+
+SELECT 
+    b.brbranchname,
+    b.brbranchphone1,
+    bt.bttypedesc AS branch_type
+FROM 
+    tblbrbranch b
+JOIN 
+    tblbtbranchtype bt ON b.brbranchtypecode = bt.bttypecode;
+
+	       -- 3. Join tblcustomer with tbladdaddress and tblbrbranch
+
+SELECT 
+    c.cstid,
+    c.cstfirstname,
+    c.cstlastname,
+    a.addline1,
+    a.addline2,
+    a.addcity,
+    a.addpostcode,
+    a.addstate,
+    a.addcountry,
+    b.brbranchname,
+    b.brbranchphone1
+FROM 
+    tblcustomer c
+JOIN 
+    tbladdaddress a ON c.cstaddid = a.addid
+JOIN 
+    tblbrbranch b ON c.cstbranchid = b.brid;
+
+	     -- 4.Join tbltrantransaction with tblaccaccount, tbltransactiontype, and tblcustomer
+
+SELECT 
+    t.tranid,
+    t.trandate,
+    t.tranamount,
+    tt.trantypedesc AS transaction_type,
+    a.accint,
+    c.cstfirstname,
+    c.cstlastname
+FROM 
+    tbltrantransaction t
+JOIN 
+    tbltransactiontype tt ON t.trantypecode = tt.trantypecode
+JOIN 
+    tblaccaccount a ON t.tranaccountint = a.accint
+JOIN 
+    tblcustomer c ON a.acccustomerid = c.cstid;
+
+	                  --Views
+			 --1. View: vw_all_customers
+
+CREATE VIEW vw_all_customers AS
+SELECT 
+    c.cstid,
+    c.cstfirstname,
+    c.cstlastname,
+    c.cstdate,
+    c.cstphone1,
+    c.cstemail
+FROM 
+    tblcustomer c;
+
+	        -- 2 .View: vw_recent_transactions
+
+CREATE VIEW vw_recent_transactions AS
+SELECT 
+    t.tranid,
+    t.trandate,
+    t.tranamount,
+    tt.trantypedesc AS transaction_type,
+    a.accint
+FROM 
+    tbltrantransaction t
+JOIN 
+    tbltransactiontype tt ON t.trantypecode = tt.trantypecode
+JOIN 
+    tblaccaccount a ON t.tranaccountint = a.accint
+WHERE 
+    t.trandate >= DATEADD(day, -30, GETDATE());
+
+	        --3.View: vw_branches_and_banks
+
+CREATE VIEW vw_branches_and_banks AS
+SELECT 
+    b.brbranchname,
+    b.brbranchphone1,
+    bk.bankdetails AS bank_name
+FROM 
+    tblbrbranch b
+JOIN 
+    tblbank bk ON b.brbankid = bk.bankid;
+
+	         --4.View: vw_branch_info
+
+CREATE VIEW vw_branch_info AS
+SELECT 
+    b.brbranchname,
+    b.brbranchphone1,
+    bt.bttypedesc AS branch_type,
+    bk.bankdetails AS bank_name
+FROM 
+    tblbrbranch b
+JOIN 
+    tblbtbranchtype bt ON b.brbranchtypecode = bt.bttypecode
+JOIN 
+    tblbank bk ON b.brbankid = bk.bankid;
+
+                   --procedures
+		    -- 1. Insert a New Bank Record
+
+CREATE PROCEDURE InsertBank
+    @bankid INT,
+    @bankdetails VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO tblbank (bankid, bankdetails)
+    VALUES (@bankid, @bankdetails);
+END;
+
+               --2.Update Branch Details
+
+CREATE PROCEDURE UpdateBranchDetails
+    @brid INT,
+    @brbankid INT,
+    @braddress INT,
+    @brbranchtypecode VARCHAR(4),
+    @brbranchname VARCHAR(100),
+    @brbranchphone1 BIGINT,
+    @brbranchphone2 BIGINT,
+    @brbranchfax BIGINT,
+    @brbranchmail VARCHAR(50),
+    @brbranchIFSC VARCHAR(20)
+AS
+BEGIN
+    UPDATE tblbrbranch
+    SET brbankid = @brbankid,
+        braddress = @braddress,
+        brbranchtypecode = @brbranchtypecode,
+        brbranchname = @brbranchname,
+        brbranchphone1 = @brbranchphone1,
+        brbranchphone2 = @brbranchphone2,
+        brbranchfax = @brbranchfax,
+        brbranchmail = @brbranchmail,
+        brbranchIFSC = @brbranchIFSC
+    WHERE brid = @brid;
+END;
+
+         --3.Get Customer Details by ID
+
+CREATE PROCEDURE GetCustomerDetails
+    @cstid INT
+AS
+BEGIN
+    SELECT *
+    FROM tblcustomer
+    WHERE cstid = @cstid;
+END;
+
+           --4.Get Account Balance by Account Number
+
+CREATE PROCEDURE GetAccountBalance
+    @accint INT
+AS
+BEGIN
+    SELECT accbalance
+    FROM tblaccaccount
+    WHERE accint = @accint;
+END;
+
+            --5. Insert a New Transaction
+
+CREATE PROCEDURE InsertTransaction
+    @tranid INT,
+    @tranaccountint INT,
+    @trantypecode VARCHAR(6),
+    @tranmerchantid VARCHAR(10),
+    @trandate DATE,
+    @tranamount INT,
+    @trandescription VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO tbltrantransaction (tranid, tranaccountint, trantypecode, tranmerchantid, trandate, tranamount, trandescription)
+    VALUES (@tranid, @tranaccountint, @trantypecode, @tranmerchantid, @trandate, @tranamount, @trandescription);
+END;
+
+SELECT * FROM sys.procedures;
+
+
+
